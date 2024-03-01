@@ -18,6 +18,7 @@ import { useStore } from "./store";
 import { SearchCountry } from "@/components/ui/SearchCountry";
 import { Switch } from "@/components/ui/switch";
 import { geoRobinson } from "d3-geo-projection";
+import { CountryBadge } from "@/components/ui/countryBadge";
 
 // const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 
@@ -106,11 +107,39 @@ export default function MapChart() {
             state={countries}
           />
         </div>
+        <div> 
+          <CountryControls
+            handleCountryClick={incrementCountryPhase}
+            state={countries}
+            useCountries={Object.keys(countries)}
+          />
+        </div>
       </div>
   );
 }
 
 const CountryControls = ({ handleCountryClick, state, useCountries }) => {
+  const resetAllExcept = useCountryStore((state) => state.resetAllExcept);
+  return (
+    <div className="country-controls-container">
+      <button
+        onClick={() => resetAllExcept()}
+        className="reset-button"
+      >
+        Reset All
+      </button>
+      <div className="country-list">
+        {useCountries.map((country) => (
+          <CountryBadge
+            key={country}
+            country={country}
+            color={state[country].color}
+            handleCountryClick={handleCountryClick}
+          />
+        ))}
+      </div>
+    </div>
+  );
 }
 
 const MapControls = ({

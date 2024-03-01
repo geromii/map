@@ -24,7 +24,7 @@ export function CountryBadge({ country, color }) {
             variant={"redCountry"} 
             onClick={handleClick} 
             className="h-6 flex-shrink-0 rounded-none px-0.5 border-black border-t-2 border-b-2 border-l-0 border-r-2 bg-white text-countryRed">
-            {'United States'} {/* Use the country prop */}
+            {country} {/* Use the country prop */}
         </Badge>
         <Badge 
          variant = {"destructive"}
