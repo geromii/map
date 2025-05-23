@@ -12,6 +12,11 @@ export const metadata = {
   title: "Geopolitical Opinions Map",
   description:
     "An interactive map that displays the geopolitical opinions of the world.",
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({ children }) {

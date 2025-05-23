@@ -148,7 +148,6 @@ const useCountryStore = create((set, get) => ({
       }
     } else {
       // Handle the case where either case1Exists or case2Exists is false
-      // For example, initialize result as an array of zeros if that's appropriate for your scenario
       result = new Array(Object.keys(countries).length).fill(0);
     }
   
@@ -184,6 +183,33 @@ async function fetchScoresMatrix() {
 function transformStateToNumericArray(stateWrapper) {
   const stateArray = new Array(200).fill(0); 
 
+  let REDUCER = 0.7
+
+  // Initialize counters for each case
+  let case1Count = 0;
+  let case2Count = 0;
+
+  // First pass to count the cases
+  Object.keys(stateWrapper).forEach(country => {
+    const countryState = stateWrapper[country].phase;
+    if (countryState === 1) case1Count++;
+    if (countryState === 2) case2Count++;
+  });
+
+  // Function to calculate the sum of the harmonic series up to n
+  const harmonicSum = n => {
+    let sum = 0;
+    for (let i = 1; i <= n; i++) {
+      sum += 1 / i;
+    }
+    return sum;
+  };
+
+  // Calculate the average values after the harmonic series division
+  const case1value = case1Count > 0 ? REDUCER *harmonicSum(case1Count) / case1Count : 0;
+  const case2value = case2Count > 0 ? REDUCER * harmonicSum(case2Count) / case2Count : 0;
+
+  // Second pass to set the values based on the case
   Object.keys(stateWrapper).forEach((country, index) => {
     const countryState = stateWrapper[country].phase;
 
@@ -192,10 +218,10 @@ function transformStateToNumericArray(stateWrapper) {
         stateArray[index] = 0;
         break;
       case 1:
-        stateArray[index] = 0.6;
+        stateArray[index] = case1value;
         break;
       case 2:
-        stateArray[index] = -0.6;
+        stateArray[index] = -case2value;
         break;
       case 3:
         stateArray[index] = 0;
@@ -207,5 +233,6 @@ function transformStateToNumericArray(stateWrapper) {
 
   return stateArray;
 }
+
 
 export default useCountryStore;
